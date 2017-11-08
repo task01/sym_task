@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+
+</head>
+<body>
+<ul id="dropdown1" class="dropdown-content">
+    <li><a href="{{ path('fos_user_profile_show') }}">SHOW PROFILE</a></li>
+    <li><a href="{{ path('fos_user_profile_edit') }}">EDIT PROFILE</a></li>
+</ul>
+<nav>
+    <div class="nav-wrapper">
+        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+        <li><a href="{{ path('post_index') }}">POSTS</a></li>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <li><a class="dropdown-button" href="#!" data-activates="dropdown1">{{ app.user.username|upper }}<i
+                                class="material-icons right">arrow_drop_down</i></a></li>
+                {#<li><a class="waves-effect waves-light btn">{{app.user.username}}</a></li>#}
+                <li><a href="{{ path('fos_user_security_logout') }}">LOGOUT</a></li>
+            {% else %}
+                <li><a href="{{ path('fos_user_security_login') }}">LOGIN</a></li>
+                <li><a href="{{ path('fos_user_registration_register') }}">REGISTER</a></li>
+            {% endif %}
+        </ul>
+        <ul class="side-nav" id="mobile-demo">
+            <li><a href="{{ path('post_index') }}">POSTS</a></li>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <li><a class="waves-effect waves-light btn">{{ app.user.username }}</a></li>
+                <li><a href="{{ path('fos_user_security_logout') }}">LOGOUT</a></li>
+            {% else %}
+                <li><a href="{{ path('fos_user_security_login') }}">LOGIN</a></li>
+                <li><a href="{{ path('fos_user_registration_register') }}">REGISTER</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+{% if app.request.hasPreviousSession %}
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="flash-{{ type }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+
+<div class="container">
+    {% block body %}
+    {% endblock body %}
+</div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+<script>
+    (function () {
+        $(".button-collapse").sideNav();
+    })()
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <h1>Posts list</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Created At</th>
+            <th>Author</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for post in pagination %}
+            <tr>
+                <td><a href="{{ path('post_show', { 'id': post.id }) }}">{{ post.title }}</a></td>
+                <td>{{ post.description }}</td>
+                <td>{{ post.createdAt.format('Y:m:d') }}</td>
+                <td>{{ post.createdBy }}</td>
+                <td>
+                    <ul>
+                        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        <li>
+                            <a href="{{ path('post_show', { 'id': post.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('post_edit', { 'id': post.id }) }}">edit</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+    <ul>
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        <li>
+            <a href="{{ path('post_new') }}">Create a new post</a>
+        </li>
+        {% endif %}
+    </ul>
+{% endblock %}
